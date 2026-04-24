@@ -27,7 +27,7 @@ class LightWeightEncoder(torch.nn.Module):
         )
 
         self.stage1 = ResidualStage(
-            channels = self.stem.channels,
+            channels = self.stem.out_channels,
             num_blocks = stage1_blocks,
             norm_type=norm_type
         )
@@ -36,7 +36,7 @@ class LightWeightEncoder(torch.nn.Module):
             stage2_out_channels, stride=2,
             num_identity_blocks=stage2_identity_blocks,
             norm_type=norm_type
-        ),
+        )
         self.stage3 = TransitionResidualStage(
             self.stage2.out_channels,
             stage3_out_channels,
