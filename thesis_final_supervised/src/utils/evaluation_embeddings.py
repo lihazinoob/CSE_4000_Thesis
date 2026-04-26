@@ -83,7 +83,7 @@ def build_normalized_writer_prototype(
         dim=1
     ).squeeze(0)
 
-    print("final prototype shape:", prototype_embedding.shape)
+
     return prototype_embedding
 
 

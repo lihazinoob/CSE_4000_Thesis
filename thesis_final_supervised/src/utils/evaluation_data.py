@@ -63,19 +63,32 @@ def gather_test_writer_signature_paths(
         split_summary_path: str,
         dataset_root: str
 ) -> Dict[int, Dict[str, List[str]]]:
-    test_writer_ids = get_split_writer_ids(
+    return gather_split_writer_signature_paths(
         split_summary_path=split_summary_path,
+        dataset_root=dataset_root,
         split_key='test_writers'
+    )
+
+
+def gather_split_writer_signature_paths(
+        split_summary_path: str,
+        dataset_root: str,
+        split_key: str
+) -> Dict[int, Dict[str, List[str]]]:
+    split_writer_ids = get_split_writer_ids(
+        split_summary_path=split_summary_path,
+        split_key=split_key
     )
     return gather_writer_signature_paths(
         dataset_root=dataset_root,
-        writer_ids=test_writer_ids
+        writer_ids=split_writer_ids
     )
 
 
 def sample_reference_and_query_genuine_paths(
         writer_to_signatures: Dict[int, Dict[str, List[str]]],
         num_reference_genuine: int = 5,
+        num_forgery_queries: int = None,
         seed: int = 2026
 ) -> Dict[int, Dict[str, List[str]]]:
     rng = random.Random(seed)
@@ -99,11 +112,22 @@ def sample_reference_and_query_genuine_paths(
             image_path for image_path in genuine_paths
             if image_path not in reference_path_set
         ]
+        if num_forgery_queries is None:
+            selected_forgery_query_paths = forgery_paths
+        else:
+            if len(forgery_paths) < num_forgery_queries:
+                raise ValueError(
+                    f"Writer {writer_id} does not have enough forgery samples for "
+                    f"{num_forgery_queries}-query evaluation."
+                )
+            selected_forgery_query_paths = sorted(
+                rng.sample(forgery_paths, num_forgery_queries)
+            )
 
         writer_to_protocol[writer_id] = {
             'reference_genuine_paths': reference_genuine_paths,
             'genuine_query_paths': genuine_query_paths,
-            'forgery_query_paths': forgery_paths,
+            'forgery_query_paths': selected_forgery_query_paths,
         }
 
     return writer_to_protocol
