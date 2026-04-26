@@ -14,7 +14,7 @@ from thesis_final_supervised.src.utils.image_loading import read_image
 
 
 def main():
-    image_path = "data/cedar_forgeries.png"
+    image_path = "data/bhsig-genuine.tif"
     figures_directory = Path("figures")
 
     # Read the image
@@ -50,8 +50,7 @@ def main():
     encoder_model.eval()
 
     input_tensor = image_tensor.unsqueeze(0).to(device)
-    target_layer = encoder_model.stem.layers[0].block[2]
-    print(target_layer)
+    target_layer = encoder_model.stage4.blocks[1].out_act
 
     extractor = FeatureMapExtractor(
         model=encoder_model,
@@ -63,11 +62,11 @@ def main():
 
     plot_feature_grid(
         feature_map=first_layer_feature_map,
-        max_channels=32,
+        max_channels=256,
         cols=8,
         cmap="inferno",
-        title="First Layer Post-ReLU Feature Maps",
-        save_path=figures_directory / "first_layer_post_relu_feature_maps.png"
+        title="Stage 4 Fourth Layer Post-ReLU",
+        save_path=figures_directory / "stage_4_fourth_layer_post_relu_feature_maps.png"
     )
 
     plot_summary_and_overlay(
@@ -75,8 +74,8 @@ def main():
         feature_map=first_layer_feature_map,
         summary_mode="abs_mean",
         heatmap_cmap="inferno",
-        title_prefix="First Layer Post-ReLU",
-        save_path=figures_directory / "first_layer_post_relu_summary_overlay.png"
+        title_prefix="Stage 4 Fourth Layer Post-ReLU",
+        save_path=figures_directory / "stage_4_fourth_layer_post_relu_summary_overlay.png"
     )
 
     extractor.close()

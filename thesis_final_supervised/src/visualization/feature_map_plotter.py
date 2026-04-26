@@ -32,7 +32,7 @@ def plot_feature_grid(
         max_channels: int = 32,
         cols: int = 8,
         cmap: str = "inferno",
-        figsize: Tuple[int, int] = (16, 8),
+        figsize: Tuple[int, int] = (16, 44),
         title: str = "Feature Maps",
         save_path: Path = None,
 ):
