@@ -80,6 +80,6 @@ class SignatureSSLDataset(Dataset):
             'image': signature_image_tensor,
             'patches': patches_tensor,
             'signature_type': str(row['signature_type']),
-            'writer_id': int(row['writer_id']),
+            'writer_id': str(row['writer_id']),
             'image_path': image_path,
         }
