@@ -1,4 +1,20 @@
 import torch
+from typing import Tuple
+
+
+def compute_fg_bg_mse(
+    target: torch.Tensor,
+    prediction: torch.Tensor,
+) -> Tuple[float, float]:
+    sq_err = (target - prediction) ** 2
+    fg_mask = (target > 0)
+    bg_mask = ~fg_mask
+
+    fg_mse = sq_err[fg_mask].mean().item() if fg_mask.any() else 0.0
+    bg_mse = sq_err[bg_mask].mean().item() if bg_mask.any() else 0.0
+
+    return fg_mse, bg_mse
+
 
 def foreground_weighted_mse_loss(
     target: torch.Tensor,
