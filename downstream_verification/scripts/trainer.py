@@ -195,6 +195,8 @@ def train():
         train_dataset=train_dataset,
         train_loader=train_loader,
         val_loader=val_loader,
+        val_inventory_df=val_inventory_df,
+        target_image_size=TARGET_IMAGE_SIZE,
         loss_function=loss_function,
         optimizer=optimizer,
         epochs=NUM_EPOCHS,

@@ -54,7 +54,7 @@ def _load_best_model(device: torch.device) -> nn.Module:
     model.eval()
     print(f'Loaded downstream model from: {_BEST_MODEL_PATH}')
     print(f"  Checkpoint epoch:    {checkpoint.get('epoch', 'unknown')}")
-    print(f"  Best val loss:       {checkpoint.get('best_val_loss', 'unknown'):.6f}")
+    print(f"  Best val AUC:        {checkpoint.get('best_val_auc', 'unknown')}")
     return model
 
 
